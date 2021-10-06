@@ -39,11 +39,11 @@ export async function setStorage(key, value) {
   await wait(() => finished)
 }
 
-export async function getStorage(key) {
+export async function getStorage(key, defaultValue = undefined) {
   let value = null
   chrome.storage.local.get([key], (result) => {
     value = result[key]
   })
   await wait(() => value !== null)
-  return value
+  return value === undefined ? defaultValue : value
 }
