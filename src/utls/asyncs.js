@@ -12,3 +12,13 @@ export async function wait(func, intervalMs = 100, timeoutMs = 0) {
   }
   return true
 }
+
+export function assignAsyncGenerator(asyncGenerator, parentObj, assignKey) {
+  parentObj[assignKey] = []
+  async function addingValue() {
+    for await (const value of asyncGenerator()) {
+      parentObj[assignKey].push(value)
+    }
+  }
+  addingValue()
+}
