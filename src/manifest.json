@@ -1,13 +1,27 @@
 {
   "manifest_version": 2,
-  "name": "__MSG_extName__",
-  "description": "A Vue Browser Extension",
+  "name": "akashic",
+  "description": "history viewer",
   "default_locale": "en",
-  "permissions": [
-    "activeTab",
-    "<all_urls>",
-    "*://*/*"
-  ],
+		"permissions": [
+			"tabs",
+            "storage",
+            "unlimitedStorage"
+		],
+    "commands": {
+        "openConfig": {
+            "suggested_key": {
+                "default": "Alt+A"
+            },
+            "description": "open history page"
+        },
+        "reload": {
+            "suggested_key": {
+                "default": "Alt+Shift+A"
+            },
+            "description": "reload extension"
+        }
+    },
   "icons": {
     "16": "icons/16.png",
     "48": "icons/48.png",
@@ -19,9 +33,15 @@
     ],
     "persistent": true
   },
+		"content_scripts": [
+		{
+			"matches": ["http://*/*", "https://*/*" ],
+			"js": ["js/content-script.js" ]
+		}
+		],
   "browser_action": {
     "default_popup": "popup.html",
-    "default_title": "__MSG_extName__",
+    "default_title": "akashic",
     "default_icon": {
       "19": "icons/19.png",
       "38": "icons/38.png"
