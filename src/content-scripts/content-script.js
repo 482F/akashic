@@ -1,4 +1,4 @@
-import { sendMessage } from "@/utls.js"
+import { sendMessage } from "@utls/messages.js"
 
 async function main() {
   sendMessage("accessed", {
