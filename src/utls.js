@@ -16,10 +16,14 @@ export function sendMessage(label, content) {
   chrome.runtime.sendMessage({ label, content })
 }
 
+export async function sleep(ms) {
+  await new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 export async function wait(func, intervalMs = 100, timeoutMs = 0) {
   const startMs = new Date().getTime()
   while (!func()) {
-    await new Promise((resolve) => setTimeout(resolve, intervalMs))
+    await sleep(intervalMs)
     if (timeoutMs && timeoutMs < new Date().getTime() - startMs) {
       return false
     }
