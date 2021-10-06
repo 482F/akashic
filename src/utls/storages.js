@@ -1,6 +1,12 @@
 import { wait } from "@utls/asyncs.js"
 
-export async function setStorage(key, value) {
+export async function setStorage(...keysAndValue) {
+  const keys = keysAndValue.slice(0, -1)
+  const value = keysAndValue.slice(-1)?.[0] || undefined
+  if (!keys.length || !value) {
+    return
+  }
+  const key = keys.join(":")
   let finished = false
   chrome.storage.local.set({ [key]: value }, () => {
     finished = true
@@ -8,11 +14,15 @@ export async function setStorage(key, value) {
   await wait(() => finished)
 }
 
-export async function getStorage(key, defaultValue = undefined) {
+export async function getStorage(...keys) {
+  if (!keys.length) {
+    return
+  }
+  const key = keys.join(":")
   let value = null
   chrome.storage.local.get([key], (result) => {
     value = result[key]
   })
   await wait(() => value !== null)
-  return value === undefined ? defaultValue : value
+  return value
 }
