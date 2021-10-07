@@ -64,7 +64,7 @@ export async function* getListContents(...keys) {
     const contents = await getStorage(...keys, index)
     for (const content of contents) {
       yield content
-      await sleep(100)
+      await sleep(0)
     }
   }
 }

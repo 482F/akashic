@@ -2,7 +2,7 @@ export async function sleep(ms) {
   await new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-export async function wait(func, intervalMs = 100, timeoutMs = 0) {
+export async function wait(func, intervalMs = 1, timeoutMs = 0) {
   const startMs = new Date().getTime()
   while (!func()) {
     await sleep(intervalMs)
