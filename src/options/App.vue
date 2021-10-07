@@ -41,14 +41,19 @@ const historyPerPage = 100
 
 function searchHistories(searchPattern) {
   const reservedPatterns = {
-    "star:true": (history) => history.star,
-    "star:false": (history) => !history.star,
+    star: (history, value) => history.star.toString() === value,
+    tag: (history, value) => Object.keys(history.tags).includes(value),
   }
   const searchers = searchPattern.split(" ").map((pattern) => {
-    return (
-      reservedPatterns[pattern] ||
-      ((history) => history.name.match(new RegExp(pattern, "i")))
-    )
+    let searcher = (history) => history.name.match(new RegExp(pattern, "i"))
+    for (const key of Object.keys(reservedPatterns)) {
+      const match = pattern.match(new RegExp(key + ":(.+)"))
+      if (match) {
+        searcher = (history) => reservedPatterns[key](history, match[1])
+        break
+      }
+    }
+    return searcher
   })
   return filterAsyncGenerator(
     getListContentsReverse("history"),
