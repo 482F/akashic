@@ -51,3 +51,13 @@ export async function* filterAsyncGenerator(asyncGenerator, func) {
     await sleep(0)
   }
 }
+
+export async function* uniqueAsyncGenerator(asyncGenerator, func) {
+  const values = []
+  for await (const value of asyncGenerator) {
+    if (!values.some((already) => func(already, value))) {
+      values.push(value)
+      yield value
+    }
+  }
+}
