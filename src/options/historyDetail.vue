@@ -1,6 +1,7 @@
 <template>
   <div v-if="ready" class="my-3">
     <p class="text-h5">{{ history.name }}</p>
+    <star :history="history" />
     <v-list disable>
       <v-list-item v-for="content in contents" :key="content.title" two-line>
         <v-list-item-content>
@@ -31,11 +32,13 @@
 import { getValueById, updateValueById } from "@utls/storages.js"
 import { dateToText } from "@utls/miscs.js"
 import Tag from "./tag.vue"
+import Star from "./star.vue"
 
 export default {
   name: "history-detail",
   components: {
     Tag,
+    Star,
   },
   mounted() {
     this.init()
