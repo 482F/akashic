@@ -1,5 +1,12 @@
 <template>
-  <v-chip v-if="existing" @click:close="remove" small close>{{ tag }}</v-chip>
+  <v-chip
+    v-if="existing"
+    @click.prevent="$emit('click', tag)"
+    @click:close="remove"
+    small
+    close
+    >{{ tag }}</v-chip
+  >
 </template>
 
 <script>

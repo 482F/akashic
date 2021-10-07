@@ -22,6 +22,7 @@
       :key="tag"
       :tag="tag"
       :history="history"
+      @click="(tag) => $emit('tag', tag)"
     />
   </div>
 </template>

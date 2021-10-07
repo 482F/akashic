@@ -14,10 +14,11 @@
               )
             "
             @select="(value) => (activeHistory = value)"
+            @tag="searchTag"
           />
         </v-col>
         <v-col cols="6">
-          <history-detail :rawHistory="activeHistory" />
+          <history-detail :rawHistory="activeHistory" @tag="searchTag" />
         </v-col>
       </v-row>
       <v-row class="pagination">
@@ -95,6 +96,9 @@ export default {
         this.rawHistories,
         "value"
       )
+    },
+    searchTag(tag) {
+      this.searchPattern = "tag:" + tag
     },
   },
   watch: {
