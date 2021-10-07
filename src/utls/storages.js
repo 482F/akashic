@@ -107,3 +107,20 @@ export async function* getListContents(...keys) {
     }
   }
 }
+
+export async function* getListContentsReverse(...keys) {
+  if (!keys?.length) {
+    return
+  }
+  const length = await getStorage(varKey, lengthKey, ...keys)
+  if (!length) {
+    return
+  }
+  for (let index = 0; index < length; index++) {
+    const contents = await getStorage(...keys, index)
+    for (const content of contents.reverse()) {
+      yield content
+      await sleep(0)
+    }
+  }
+}
