@@ -11,21 +11,38 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
+    <v-text-field
+      v-model="tagInput"
+      @keydown.enter="registerTag"
+      outlined
+      label="input tag"
+    />
+    <tag
+      v-for="tag in Object.keys(history.tags)"
+      :key="tag"
+      :tag="tag"
+      :history="history"
+    />
   </div>
 </template>
 
 <script>
-import { getValueById } from "@utls/storages.js"
+import { getValueById, updateValueById } from "@utls/storages.js"
 import { dateToText } from "@utls/miscs.js"
+import Tag from "./tag.vue"
 
 export default {
   name: "history-detail",
+  components: {
+    Tag,
+  },
   mounted() {
     this.init()
   },
   data() {
     return {
       ready: false,
+      tagInput: "",
       contents: [],
     }
   },
@@ -58,6 +75,14 @@ export default {
         },
       ]
       this.ready = true
+    },
+    async registerTag() {
+      const newTag = this.tagInput
+      this.tagInput = ""
+      this.history.tags[newTag] = null
+      await updateValueById("page", this.rawHistory.id, {
+        tags: this.history.tags,
+      })
     },
   },
   watch: {

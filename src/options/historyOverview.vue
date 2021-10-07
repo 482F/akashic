@@ -6,9 +6,12 @@
     <v-list-item-content>
       <v-list-item-title v-text="history.name" />
       <v-list-item-subtitle>
-        <v-chip v-for="(tag, i) in Object.keys(history.tags)" :key="i" small>
-          {{ tag }}
-        </v-chip>
+        <tag
+          v-for="tag in Object.keys(history.tags)"
+          :key="tag"
+          :tag="tag"
+          :history="history"
+        />
       </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action>
@@ -23,9 +26,13 @@
 <script>
 import { dateToText, faviconIntArrToImgSrc } from "@utls/miscs.js"
 import { getValueById, updateValueById } from "@utls/storages.js"
+import Tag from "./tag.vue"
 
 export default {
   name: "history-overview",
+  components: {
+    Tag,
+  },
   mounted() {
     this.init()
   },
