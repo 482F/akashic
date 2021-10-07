@@ -27,9 +27,35 @@ export async function getStorage(...keys) {
   return value
 }
 
-const maxListContentNumber = 1000
 const varKey = "var"
+const idKey = "id"
 const lengthKey = "length"
+
+export async function setValueByKey(category, key, value) {
+  let id = await getStorage(category, key)
+  if (!id) {
+    id = ((await getStorage(varKey, lengthKey, category)) || 0) + 1
+    await setStorage(category, key, id)
+    await setStorage(varKey, lengthKey, category, id)
+  }
+  await setValueById(category, id, value)
+  return id
+}
+
+export async function setValueById(category, id, value) {
+  await setStorage(category, idKey, id, value)
+}
+
+export async function getValueByKey(category, key) {
+  const id = await getStorage(category, key)
+  return await getValueById(category, id)
+}
+
+export async function getValueById(category, id) {
+  return await getStorage(category, idKey, id)
+}
+
+const maxListContentNumber = 1000
 
 export async function pushToList(...keysAndValue) {
   const keys = keysAndValue?.slice(0, -1)
