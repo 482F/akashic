@@ -13,14 +13,27 @@ export async function wait(func, intervalMs = 1, timeoutMs = 0) {
   return true
 }
 
+const assigns = {}
+
 export function assignAsyncGenerator(asyncGenerator, parentObj, assignKey) {
+  const assignId = new Date().getTime + Math.random()
+  assigns[assignId] = true
+
+  const stopFunc = () => {
+    assigns[assignId] = false
+  }
+
   parentObj[assignKey] = []
   async function addingValue() {
     for await (const value of asyncGenerator) {
       parentObj[assignKey].push(value)
+      if (!assigns[assignId]) {
+        break
+      }
     }
   }
   addingValue()
+  return stopFunc
 }
 
 export async function* mapAsyncGenerator(asyncGenerator, func) {
