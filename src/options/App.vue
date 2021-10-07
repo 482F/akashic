@@ -33,7 +33,11 @@
 </template>
 
 <script>
-import { assignAsyncGenerator, filterAsyncGenerator } from "@utls/asyncs.js"
+import {
+  assignAsyncGenerator,
+  filterAsyncGenerator,
+  uniqueAsyncGenerator,
+} from "@utls/asyncs.js"
 import { getListContentsReverse, getValueById } from "@utls/storages.js"
 import HistoryOverviews from "./historyOverviews.vue"
 import HistoryDetail from "./historyDetail.vue"
@@ -82,8 +86,9 @@ export default {
       },
       shownRawHistories: [],
       activeHistory: undefined,
-      searchPattern: "",
+      searchPattern: "initial",
       stopAssignFunc: () => undefined,
+      uniqueFlag: false,
     }
   },
   computed: {
@@ -91,11 +96,7 @@ export default {
   },
   methods: {
     async init() {
-      this.stopAssignFunc = assignAsyncGenerator(
-        getListContentsReverse("history"),
-        this.rawHistories,
-        "value"
-      )
+      this.searchPattern = "" // watch の searchPattern を起動
     },
     searchTag(tag) {
       this.searchPattern = "tag:" + tag
@@ -104,8 +105,15 @@ export default {
   watch: {
     searchPattern(value) {
       this.stopAssignFunc()
+      let asyncGenerator = searchHistories(value)
+      if (this.uniqueFlag) {
+        asyncGenerator = uniqueAsyncGenerator(
+          asyncGenerator,
+          (alreadyValue, newValue) => alreadyValue.id === newValue.id
+        )
+      }
       this.stopAssignFunc = assignAsyncGenerator(
-        searchHistories(value),
+        asyncGenerator,
         this.rawHistories,
         "value"
       )
