@@ -43,7 +43,20 @@ export async function setValueByKey(category, key, value) {
 }
 
 export async function setValueById(category, id, value) {
-  await setStorage(category, idKey, id, value)
+  return await setStorage(category, idKey, id, value)
+}
+
+export async function updateValueByKey(category, key, value) {
+  let id = await getStorage(category, key)
+  if (!id) {
+    return setValueByKey(category, key, value)
+  }
+  return await updateValueById(category, id, value)
+}
+
+export async function updateValueById(category, id, value) {
+  const oldValue = await getValueById(category, id)
+  return await setValueById(category, id, { ...oldValue, ...value })
 }
 
 export async function getValueByKey(category, key) {
