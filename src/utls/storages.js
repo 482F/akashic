@@ -49,7 +49,7 @@ export async function setValueById(category, id, value) {
 export async function updateValueByKey(category, key, value) {
   let id = await getStorage(category, key)
   if (!id) {
-    return setValueByKey(category, key, value)
+    return
   }
   return await updateValueById(category, id, value)
 }
