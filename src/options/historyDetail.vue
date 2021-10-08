@@ -17,8 +17,13 @@
       @keydown.enter="registerTag"
       outlined
       label="input tag"
+      class="h-16"
     />
-    <tags :history="history" @click="(tag) => $emit('tag', tag)" />
+    <tags
+      :history="history"
+      @click="(tag) => $emit('tag', tag)"
+      class="inline-block mb-3"
+    />
     <v-textarea
       v-model="history.note"
       outlined
