@@ -72,33 +72,8 @@ import HistoryOverviews from "./historyOverviews.vue"
 import HistoryDetail from "./historyDetail.vue"
 
 const historyPerPage = 100
-let filterStar = false
-
-async function searchHistories(searchPattern) {
-  const reservedPatterns = {
-    tag: (history, value) => Object.keys(history.tags).includes(value),
-  }
-  const searchers = searchPattern.split(" ").map((pattern) => {
-    let searcher = (history) =>
-      (history.name || history.url).match(new RegExp(pattern, "i"))
-    for (const key of Object.keys(reservedPatterns)) {
-      const match = pattern.match(new RegExp(key + ":(.+)"))
-      if (match) {
-        searcher = (history) => reservedPatterns[key](history, match[1])
-        break
-      }
-    }
-    return searcher
-  })
-  const asyncGenerator = filterStar
-    ? arrayToAsyncGenerator(
-        Object.keys((await getStorage("stars")) || {}).map((id) => ({ id }))
-      )
-    : getListContentsReverse("history")
-  return filterAsyncGenerator(asyncGenerator, async function (rawHistory) {
-    const history = await getValueById("page", rawHistory.id)
-    return searchers.every((searcher) => searcher(history))
-  })
+const reservedPatterns = {
+  tag: (history, value) => Object.keys(history.tags).includes(value),
 }
 
 export default {
@@ -121,16 +96,16 @@ export default {
       searchPattern: "",
       stopAssignFunc: () => undefined,
       uniqueFlag: false,
-      filterStar,
+      filterStar: false,
     }
   },
   computed: {
     historyPerPage: () => historyPerPage,
   },
   methods: {
-    async init(value = "") {
+    async init() {
       this.stopAssignFunc()
-      let asyncGenerator = await searchHistories(value)
+      let asyncGenerator = await this.searchHistories()
       if (this.uniqueFlag) {
         asyncGenerator = uniqueAsyncGenerator(
           asyncGenerator,
@@ -143,22 +118,42 @@ export default {
         "value"
       )
     },
+    async searchHistories() {
+      const searchers = this.searchPattern.split(" ").map((pattern) => {
+        let searcher = (history) =>
+          (history.name || history.url).match(new RegExp(pattern, "i"))
+        for (const key of Object.keys(reservedPatterns)) {
+          const match = pattern.match(new RegExp(key + ":(.+)"))
+          if (match) {
+            searcher = (history) => reservedPatterns[key](history, match[1])
+            break
+          }
+        }
+        return searcher
+      })
+      const asyncGenerator = this.filterStar
+        ? arrayToAsyncGenerator(
+            Object.keys((await getStorage("stars")) || {}).map((id) => ({ id }))
+          )
+        : getListContentsReverse("history")
+      return filterAsyncGenerator(asyncGenerator, async function (rawHistory) {
+        const history = await getValueById("page", rawHistory.id)
+        return searchers.every((searcher) => searcher(history))
+      })
+    },
     searchTag(tag) {
       this.searchPattern = "tag:" + tag
     },
-    switchFilterStar(value) {
-      filterStar = value
-    },
   },
   watch: {
-    searchPattern(value) {
-      this.init(value)
+    searchPattern() {
+      this.init()
     },
     uniqueFlag() {
-      this.init(this.searchPattern)
+      this.init()
     },
     filterStar() {
-      this.init(this.searchPattern)
+      this.init()
     },
   },
 }
