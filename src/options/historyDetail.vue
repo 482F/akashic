@@ -48,6 +48,7 @@ export default {
       ready: false,
       tagInput: "",
       contents: [],
+      history: undefined,
     }
   },
   props: {
