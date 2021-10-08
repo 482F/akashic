@@ -65,7 +65,7 @@ function makeContents(history) {
     title: "access count per day",
     body:
       (history.accessDates.length * 1000 * 60 * 60 * 24) /
-      (lastAccessDate - firstAccessDate),
+      (new Date().getTime() - firstAccessDate),
   })
   return contents
 }
