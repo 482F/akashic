@@ -85,7 +85,7 @@ export default {
         value: [],
       },
       activeHistory: undefined,
-      searchPattern: "initial",
+      searchPattern: "",
       stopAssignFunc: () => undefined,
       uniqueFlag: false,
     }
@@ -94,15 +94,7 @@ export default {
     historyPerPage: () => historyPerPage,
   },
   methods: {
-    async init() {
-      this.searchPattern = "" // watch の searchPattern を起動
-    },
-    searchTag(tag) {
-      this.searchPattern = "tag:" + tag
-    },
-  },
-  watch: {
-    searchPattern(value) {
+    async init(value = "") {
       this.stopAssignFunc()
       let asyncGenerator = searchHistories(value)
       if (this.uniqueFlag) {
@@ -116,6 +108,14 @@ export default {
         this.rawHistories,
         "value"
       )
+    },
+    searchTag(tag) {
+      this.searchPattern = "tag:" + tag
+    },
+  },
+  watch: {
+    searchPattern(value) {
+      this.init(value)
     },
   },
 }
