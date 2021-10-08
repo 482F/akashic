@@ -1,6 +1,6 @@
 <template>
   <div v-if="ready" class="my-3">
-    <p class="text-h5">{{ history.name }}</p>
+    <p class="text-h5">{{ history.name || history.url }}</p>
     <star :history="history" />
     <v-list disable>
       <v-list-item v-for="content in contents" :key="content.title" two-line>

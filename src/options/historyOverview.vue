@@ -4,7 +4,7 @@
       <v-img :src="history.faviconSrc" class="inline-block" />
     </v-list-item-icon>
     <v-list-item-content>
-      <v-list-item-title v-text="history.name" />
+      <v-list-item-title v-text="history.name || history.url" />
       <v-list-item-subtitle>
         <tag
           v-for="tag in Object.keys(history.tags)"
