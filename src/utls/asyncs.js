@@ -4,7 +4,7 @@ export async function sleep(ms) {
 
 export async function wait(func, intervalMs = 1, timeoutMs = 0) {
   const startMs = new Date().getTime()
-  while (!func()) {
+  while (!(await func())) {
     await sleep(intervalMs)
     if (timeoutMs && timeoutMs < new Date().getTime() - startMs) {
       return false
