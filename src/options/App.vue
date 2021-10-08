@@ -35,7 +35,7 @@
         </div>
       </v-row>
       <v-row>
-        <v-col cols="6">
+        <v-col cols="6" class="scrollable">
           <history-overviews
             :rawHistories="
               rawHistories.value.slice(
@@ -47,7 +47,7 @@
             @tag="searchTag"
           />
         </v-col>
-        <v-col cols="6">
+        <v-col cols="6" class="scrollable">
           <history-detail :rawHistory="activeHistory" @tag="searchTag" />
         </v-col>
       </v-row>
@@ -171,5 +171,22 @@ export default {
   height: 5vh;
   @apply border;
   @apply justify-center;
+}
+.scrollable {
+  height: 75vh;
+  @apply overflow-auto;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 100px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #a8a8a8;
+    border-radius: 100px;
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="ready" class="my-3">
+  <div v-if="ready" class="detail">
     <p class="text-h5">{{ history.name || history.url }}</p>
     <star :history="history" />
     <v-list disable>
@@ -24,6 +24,12 @@
       :tag="tag"
       :history="history"
       @click="(tag) => $emit('tag', tag)"
+    />
+    <v-textarea
+      v-model="history.note"
+      outlined
+      label="note"
+      @change="updateNote"
     />
   </div>
 </template>
