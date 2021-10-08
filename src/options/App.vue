@@ -2,7 +2,14 @@
   <v-app>
     <v-container class="root">
       <v-row>
-        <v-text-field filled class="search" v-model="searchPattern" />
+        <v-text-field filled class="search" v-model="searchPattern">
+          <template v-slot:append>
+            <v-progress-circular
+              v-if="!rawHistories.finished"
+              indeterminate
+            ></v-progress-circular>
+          </template>
+        </v-text-field>
       </v-row>
       <v-row>
         <v-col cols="6">
@@ -83,6 +90,7 @@ export default {
       page: 1,
       rawHistories: {
         value: [],
+        finished: false,
       },
       activeHistory: undefined,
       searchPattern: "",

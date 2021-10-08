@@ -15,7 +15,7 @@ export async function wait(func, intervalMs = 1, timeoutMs = 0) {
 
 const assigns = {}
 
-export function assignAsyncGenerator(asyncGenerator, parentObj, assignKey) {
+export function assignAsyncGenerator(asyncGenerator, parentObj) {
   const assignId = new Date().getTime + Math.random()
   assigns[assignId] = true
 
@@ -23,14 +23,16 @@ export function assignAsyncGenerator(asyncGenerator, parentObj, assignKey) {
     assigns[assignId] = false
   }
 
-  parentObj[assignKey] = []
+  parentObj.value = []
+  parentObj.finished = false
   async function addingValue() {
     for await (const value of asyncGenerator) {
       if (!assigns[assignId]) {
         break
       }
-      parentObj[assignKey].push(value)
+      parentObj.value.push(value)
     }
+    parentObj.finished = true
   }
   addingValue()
   return stopFunc
