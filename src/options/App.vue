@@ -13,7 +13,25 @@
       </v-row>
       <v-row>
         <div class="tools">
-          <v-switch v-model="uniqueFlag" label="重複を表示しない" dense />
+          <v-switch
+            v-model="uniqueFlag"
+            label="重複を表示しない"
+            dense
+            class="inline-block mr-2"
+          />
+          <v-switch
+            :value="searchPattern.includes('star:true')"
+            @click="
+              () => {
+                searchPattern = searchPattern.includes('star:true')
+                  ? (searchPattern = searchPattern.replace('star:true', ''))
+                  : (searchPattern = 'star:true ' + searchPattern)
+              }
+            "
+            label="スターのみ表示"
+            dense
+            class="inline-block mr-2"
+          />
         </div>
       </v-row>
       <v-row>
