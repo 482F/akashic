@@ -21,7 +21,6 @@
           />
           <v-switch
             v-model="filterStar"
-            @change="switchFilterStar"
             label="スターのみ表示"
             dense
             class="inline-block mr-2"
@@ -42,7 +41,7 @@
           />
         </v-col>
         <v-col cols="6" class="scrollable">
-          <history-detail :rawHistory="activeHistory" @tag="searchTag" />
+          <history-detail :history="activeHistory" @tag="searchTag" />
         </v-col>
       </v-row>
       <v-row class="pagination">
@@ -73,7 +72,7 @@ import HistoryDetail from "./historyDetail.vue"
 
 const historyPerPage = 100
 const reservedPatterns = {
-  tag: (history, value) => Object.keys(history.tags).includes(value),
+  tag: (history, value) => history.tags.includes(value),
 }
 
 export default {
