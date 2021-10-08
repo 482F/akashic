@@ -46,13 +46,27 @@ function makeContents(history) {
     title: "URL",
     body: `<a href="${history.url}">${history.url}</a>`,
   })
+
+  const firstAccessDate = history.accessDates[0]
+  const lastAccessDate = history.accessDates.slice(-1)[0]
+
+  contents.push({
+    title: "first accessed",
+    body: dateToText(new Date(firstAccessDate)),
+  })
   contents.push({
     title: "last accessed",
-    body: dateToText(new Date(history.accessDates.slice(-1)[0])),
+    body: dateToText(new Date(lastAccessDate)),
   })
   contents.push({
     title: "access count",
     body: history.accessDates.length,
+  })
+  contents.push({
+    title: "access count per day",
+    body:
+      (history.accessDates.length * 1000 * 60 * 60 * 24) /
+      (lastAccessDate - firstAccessDate),
   })
   return contents
 }
@@ -86,6 +100,7 @@ export default {
         return
       }
       this.history = await getValueById("page", this.rawHistory.id)
+      this.history.note = this.history.note || ""
       const domain = await getValueById("domain", this.history.domain)
       this.history.domain = domain
       this.contents = makeContents(this.history)
@@ -98,6 +113,9 @@ export default {
       await updateValueById("page", this.rawHistory.id, {
         tags: this.history.tags,
       })
+    },
+    async updateNote(value) {
+      await updateValueById("page", this.rawHistory.id, { note: value })
     },
   },
   watch: {
