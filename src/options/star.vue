@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { updateValueByKey } from "@utls/storages.js"
+import { getStorage, setStorage, updateValueByKey } from "@utls/storages.js"
 
 export default {
   name: "star",
@@ -21,6 +21,14 @@ export default {
       await updateValueByKey("page", this.history.url, {
         star: this.history.star,
       })
+      const stars = (await getStorage("stars")) || {}
+      const id = await getStorage("page", this.history.url)
+      if (this.history.star) {
+        stars[id] = null
+      } else {
+        delete stars[id]
+      }
+      await setStorage("stars", stars)
     },
   },
 }
