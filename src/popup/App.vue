@@ -1,13 +1,14 @@
 <template>
-  <v-app v-if="rawHistory">
+  <v-app v-if="history">
     <div class="m-4">
-      <history-detail :rawHistory="rawHistory" />
+      <history-detail :history="history" />
     </div>
   </v-app>
 </template>
 
 <script>
-import { getStorage } from "@utls/storages.js"
+import { wait } from "@utls/asyncs.js"
+import { getValueByKey } from "@utls/storages.js"
 import HistoryDetail from "@/options/historyDetail.vue"
 
 export default {
@@ -20,7 +21,7 @@ export default {
   },
   data() {
     return {
-      rawHistory: null,
+      history: null,
     }
   },
   methods: {
@@ -31,10 +32,10 @@ export default {
         async function (tabs) {
           const url = tabs?.[0].url
           if (url) {
-            that.rawHistory = {
-              id: await getStorage("page", url),
-              date: new Date().getTime(),
-            }
+            await wait(async function () {
+              that.history = await getValueByKey("page", url)
+              return that.history
+            })
           }
         }
       )
