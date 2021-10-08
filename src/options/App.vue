@@ -12,6 +12,11 @@
         </v-text-field>
       </v-row>
       <v-row>
+        <div class="tools">
+          <v-switch v-model="uniqueFlag" label="重複を表示しない" dense />
+        </div>
+      </v-row>
+      <v-row>
         <v-col cols="6">
           <history-overviews
             :rawHistories="
@@ -125,6 +130,9 @@ export default {
     searchPattern(value) {
       this.init(value)
     },
+    uniqueFlag() {
+      this.init(this.searchPattern)
+    },
   },
 }
 </script>
@@ -132,6 +140,10 @@ export default {
 <style lang="scss" scoped>
 .search {
   height: 5vh;
+}
+.tools {
+  height: 5vh;
+  @apply mx-2;
 }
 .root {
   @apply my-8;
