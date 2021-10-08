@@ -84,7 +84,6 @@ export default {
       rawHistories: {
         value: [],
       },
-      shownRawHistories: [],
       activeHistory: undefined,
       searchPattern: "initial",
       stopAssignFunc: () => undefined,
