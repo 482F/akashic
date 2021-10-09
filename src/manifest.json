@@ -3,42 +3,36 @@
   "name": "akashic",
   "description": "history viewer",
   "default_locale": "en",
-		"permissions": [
-			"tabs",
-            "storage",
-            "unlimitedStorage"
-		],
-    "commands": {
-        "openConfig": {
-            "suggested_key": {
-                "default": "Alt+A"
-            },
-            "description": "open history page"
-        },
-        "reload": {
-            "suggested_key": {
-                "default": "Alt+Shift+A"
-            },
-            "description": "reload extension"
-        }
+  "permissions": ["tabs", "storage", "unlimitedStorage"],
+  "commands": {
+    "openConfig": {
+      "suggested_key": {
+        "default": "Alt+A"
+      },
+      "description": "open history page"
     },
+    "reload": {
+      "suggested_key": {
+        "default": "Alt+Shift+A"
+      },
+      "description": "reload extension"
+    }
+  },
   "icons": {
     "16": "icons/16.png",
     "48": "icons/48.png",
     "128": "icons/128.png"
   },
   "background": {
-    "scripts": [
-      "js/background.js"
-    ],
+    "scripts": ["js/background.js"],
     "persistent": true
   },
-		"content_scripts": [
-		{
-			"matches": ["http://*/*", "https://*/*" ],
-			"js": ["js/content-script.js" ]
-		}
-		],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["js/content-script.js"]
+    }
+  ],
   "browser_action": {
     "default_popup": "popup.html",
     "default_title": "akashic",
