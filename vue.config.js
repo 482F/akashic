@@ -11,6 +11,7 @@ module.exports = {
       title: "Options",
     },
   },
+
   pluginOptions: {
     browserExtension: {
       componentOptions: {
@@ -25,4 +26,4 @@ module.exports = {
       },
     },
   },
-};
+}
