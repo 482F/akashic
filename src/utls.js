@@ -44,6 +44,6 @@ export async function getStorage(key) {
   chrome.storage.local.get([key], (result) => {
     value = result[key]
   })
-  await wait(() => value)
+  await wait(() => value !== null)
   return value
 }
