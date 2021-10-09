@@ -1,9 +1,9 @@
 import { wait, sleep } from "@utls/asyncs.js"
 
 export async function setStorage(...keysAndValue) {
-  const keys = keysAndValue.slice(0, -1)
-  const value = keysAndValue.slice(-1)?.[0]
-  if (!keys.length || !value) {
+  const keys = keysAndValue?.slice(0, -1)
+  const value = keysAndValue?.slice(-1)?.[0]
+  if (!keys?.length || !value) {
     return
   }
   const key = keys.join(":")
@@ -15,7 +15,7 @@ export async function setStorage(...keysAndValue) {
 }
 
 export async function getStorage(...keys) {
-  if (!keys.length) {
+  if (!keys?.length) {
     return
   }
   const key = keys.join(":")
