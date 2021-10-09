@@ -1,8 +1,8 @@
-import { wait } from "@utls/asyncs.js"
+import { wait, sleep } from "@utls/asyncs.js"
 
 export async function setStorage(...keysAndValue) {
   const keys = keysAndValue.slice(0, -1)
-  const value = keysAndValue.slice(-1)?.[0] || undefined
+  const value = keysAndValue.slice(-1)?.[0]
   if (!keys.length || !value) {
     return
   }
