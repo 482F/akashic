@@ -4,7 +4,7 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        "@utls": path.resolve(__dirname, "src/utls.js"),
+        "@utls": path.resolve(__dirname, "src/utls"),
       },
     },
   },
