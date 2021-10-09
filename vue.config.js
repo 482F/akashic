@@ -1,4 +1,13 @@
+const path = require("path")
+
 module.exports = {
+  configureWebpack: {
+    resolve: {
+      alias: {
+        "@utls": path.resolve(__dirname, "src/utls.js"),
+      },
+    },
+  },
   pages: {
     popup: {
       template: "public/browser-extension.html",
