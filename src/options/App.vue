@@ -11,7 +11,7 @@ export default {
 }
 </script>
 
-<style>
+<style src="@/tailwind.css">
 html {
   width: 400px;
   height: 400px;
