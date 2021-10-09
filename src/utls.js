@@ -26,3 +26,20 @@ export async function wait(func, intervalMs = 100, timeoutMs = 0) {
   }
   return true
 }
+
+export async function setStorage(key, value) {
+  let finished = false
+  chrome.storage.local.set({ [key]: value }, () => {
+    finished = true
+  })
+  await wait(() => finished)
+}
+
+export async function getStorage(key) {
+  let value = null
+  chrome.storage.local.get([key], (result) => {
+    value = result[key]
+  })
+  await wait(() => value)
+  return value
+}
