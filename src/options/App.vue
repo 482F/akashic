@@ -40,12 +40,21 @@ import HistoryDetail from "./historyDetail.vue"
 const historyPerPage = 100
 
 function searchHistories(searchPattern) {
-  const regex = new RegExp(searchPattern, "i")
+  const reservedPatterns = {
+    "star:true": (history) => history.star,
+    "star:false": (history) => !history.star,
+  }
+  const searchers = searchPattern.split(" ").map((pattern) => {
+    return (
+      reservedPatterns[pattern] ||
+      ((history) => history.name.match(new RegExp(pattern, "i")))
+    )
+  })
   return filterAsyncGenerator(
     getListContentsReverse("history"),
     async function (rawHistory) {
       const history = await getValueById("page", rawHistory.id)
-      return history.name.match(regex)
+      return searchers.every((searcher) => searcher(history))
     }
   )
 }
