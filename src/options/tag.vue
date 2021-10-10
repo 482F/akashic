@@ -1,0 +1,36 @@
+<template>
+  <v-chip v-if="existing" @click:close="remove" small close>{{ tag }}</v-chip>
+</template>
+
+<script>
+import { updateValueByKey } from "@utls/storages.js"
+
+export default {
+  name: "tag",
+  data() {
+    return {
+      existing: true,
+    }
+  },
+  props: {
+    tag: {
+      type: String,
+      require: true,
+    },
+    history: {
+      type: Object,
+      require: true,
+    },
+  },
+  methods: {
+    async remove() {
+      const tags = this.history.tags
+      delete tags[this.tag]
+      await updateValueByKey("page", this.history.url, { tags })
+      this.existing = false
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped></style>
