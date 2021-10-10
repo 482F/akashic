@@ -1,8 +1,8 @@
 import { wait } from "@utls/asyncs.js"
 
-export async function getFaviconBlob(url) {
+export async function getFaviconIntArr(url) {
   const request = new XMLHttpRequest()
-  request.responseType = "blob"
+  request.responseType = "arraybuffer"
   request.open(
     "GET",
     `https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`,
@@ -16,5 +16,10 @@ export async function getFaviconBlob(url) {
   await wait(() => {
     return blob
   })
-  return blob.type === "image/png" ? blob : undefined
+  return Array.from(new Uint8Array(blob))
+}
+
+export function faviconIntArrToImgSrc(intArr) {
+  const data = new Uint8Array(intArr)
+  return URL.createObjectURL(new Blob([data], { type: "image/png" }))
 }
