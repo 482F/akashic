@@ -51,7 +51,7 @@ async function setHistory(obj) {
   }
   history.accessDates.push(new Date().getTime())
   const pageId = await setValueByKey("page", obj.url, history)
-  await pushToList("history", pageId)
+  await pushToList("history", { id: pageId, date: new Date().getTime() })
   let domainObj = await getValueByKey("domain", domain)
   if (!domainObj) {
     domainObj = {
