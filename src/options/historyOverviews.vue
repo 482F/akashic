@@ -40,7 +40,7 @@ export default {
 
 <style lang="scss" scoped>
 .overviews {
-  height: 80vh;
+  height: 75vh;
   @apply overflow-auto;
   scrollbar-width: thin;
   scrollbar-color: #6969dd #e0e0e0;
