@@ -5,6 +5,7 @@
         v-for="(rawHistory, i) in rawHistories"
         :key="i"
         :rawHistory="rawHistory"
+        @tag="(tag) => $emit('tag', tag)"
       />
     </v-list-item-group>
   </v-list>

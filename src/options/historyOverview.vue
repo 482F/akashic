@@ -11,6 +11,7 @@
           :key="tag"
           :tag="tag"
           :history="history"
+          @click="(tag) => $emit('tag', tag)"
         />
       </v-list-item-subtitle>
     </v-list-item-content>
