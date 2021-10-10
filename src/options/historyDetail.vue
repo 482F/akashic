@@ -71,7 +71,7 @@ export default {
         },
         {
           title: "last accessed",
-          body: dateToText(new Date(this.rawHistory.date)),
+          body: dateToText(new Date(this.history.accessDates.slice(-1)[0])),
         },
         {
           title: "access count",
