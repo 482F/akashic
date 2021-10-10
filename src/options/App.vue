@@ -7,7 +7,12 @@
       <v-row>
         <v-col cols="6">
           <history-overviews
-            :rawHistories="rawHistories.value"
+            :rawHistories="
+              rawHistories.value.slice(
+                (page - 1) * historyPerPage,
+                page * historyPerPage
+              )
+            "
             @select="(value) => (activeHistory = value)"
           />
         </v-col>
@@ -16,7 +21,11 @@
         </v-col>
       </v-row>
       <v-row class="pagination">
-        <v-pagination :length="6" />
+        <v-pagination
+          v-model="page"
+          :length="Math.ceil(rawHistories.value.length / historyPerPage)"
+          :total-visible="10"
+        />
       </v-row>
     </v-container>
   </v-app>
@@ -27,6 +36,8 @@ import { assignAsyncGenerator, filterAsyncGenerator } from "@utls/asyncs.js"
 import { getListContentsReverse, getValueById } from "@utls/storages.js"
 import HistoryOverviews from "./historyOverviews.vue"
 import HistoryDetail from "./historyDetail.vue"
+
+const historyPerPage = 100
 
 function searchHistories(searchPattern) {
   const regex = new RegExp(searchPattern, "i")
@@ -50,13 +61,18 @@ export default {
   },
   data() {
     return {
+      page: 1,
       rawHistories: {
         value: [],
       },
+      shownRawHistories: [],
       activeHistory: undefined,
       searchPattern: "",
       stopAssignFunc: () => undefined,
     }
+  },
+  computed: {
+    historyPerPage: () => historyPerPage,
   },
   methods: {
     async init() {

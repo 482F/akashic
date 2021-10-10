@@ -66,6 +66,12 @@ export default {
       window.open(this.history.url)
     },
   },
+  watch: {
+    "rawHistory.id": function () {
+      this.ready = false
+      this.init()
+    },
+  },
 }
 </script>
 
