@@ -22,3 +22,19 @@ export function assignAsyncGenerator(asyncGenerator, parentObj, assignKey) {
   }
   addingValue()
 }
+
+export async function* mapAsyncGenerator(asyncGenerator, func) {
+  for await (const value of asyncGenerator) {
+    yield await func(value)
+    await sleep(0)
+  }
+}
+
+export async function* filterAsyncGenerator(asyncGenerator, func) {
+  for await (const value of asyncGenerator) {
+    if (await func(value)) {
+      yield value
+    }
+    await sleep(0)
+  }
+}
