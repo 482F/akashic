@@ -14,7 +14,7 @@
     <v-list-item-action>
       <v-list-item-action-text v-text="accesseDate" />
       <v-icon @click="switchStar">
-        {{ "mdi-star" + (history.star ? "-outline" : "") }}
+        {{ "mdi-star" + (history.star ? "" : "-outline") }}
       </v-icon>
     </v-list-item-action>
   </v-list-item>
