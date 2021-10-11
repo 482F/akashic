@@ -5,6 +5,7 @@
     @click:close="remove"
     small
     close
+    class="mx-1"
     >{{ tag }}</v-chip
   >
 </template>
