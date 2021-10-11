@@ -1,18 +1,16 @@
 <template>
-  <v-list-item :href="history.url" v-if="ready" @click.prevent="">
+  <v-list-item
+    :href="history.url"
+    v-if="ready"
+    @click.prevent="$emit('click', history)"
+  >
     <v-list-item-icon>
       <v-img :src="history.faviconSrc" class="inline-block" />
     </v-list-item-icon>
     <v-list-item-content>
       <v-list-item-title v-text="history.name || history.url" />
       <v-list-item-subtitle>
-        <tag
-          v-for="tag in Object.keys(history.tags)"
-          :key="tag"
-          :tag="tag"
-          :history="history"
-          @click="(tag) => $emit('tag', tag)"
-        />
+        <tags :history="history" @click="(tag) => $emit('tag', tag)" />
       </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action>
@@ -25,13 +23,13 @@
 <script>
 import { dateToText, faviconIntArrToImgSrc } from "@utls/miscs.js"
 import { getValueById } from "@utls/storages.js"
-import Tag from "./tag.vue"
+import Tags from "./tags.vue"
 import Star from "./star.vue"
 
 export default {
   name: "history-overview",
   components: {
-    Tag,
+    Tags,
     Star,
   },
   mounted() {
@@ -51,7 +49,9 @@ export default {
   },
   computed: {
     accesseDate() {
-      return dateToText(new Date(this.rawHistory.date))
+      return this.rawHistory.date
+        ? dateToText(new Date(this.rawHistory.date))
+        : ""
     },
   },
   methods: {

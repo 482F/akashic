@@ -5,6 +5,7 @@
         v-for="(rawHistory, i) in rawHistories"
         :key="i"
         :rawHistory="rawHistory"
+        @click="(history) => $emit('select', history)"
         @tag="(tag) => $emit('tag', tag)"
       />
     </v-list-item-group>
@@ -28,11 +29,6 @@ export default {
     rawHistories: {
       type: Array,
       default: () => [],
-    },
-  },
-  watch: {
-    activeItem(value) {
-      this.$emit("select", this.rawHistories[value])
     },
   },
 }

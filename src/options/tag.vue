@@ -33,7 +33,7 @@ export default {
   methods: {
     async remove() {
       const tags = this.history.tags
-      delete tags[this.tag]
+      tags.splice(tags.indexOf(this.tag), 1)
       await updateValueByKey("page", this.history.url, { tags })
       this.existing = false
     },

@@ -18,13 +18,7 @@
       outlined
       label="input tag"
     />
-    <tag
-      v-for="tag in Object.keys(history.tags)"
-      :key="tag"
-      :tag="tag"
-      :history="history"
-      @click="(tag) => $emit('tag', tag)"
-    />
+    <tags :history="history" @click="(tag) => $emit('tag', tag)" />
     <v-textarea
       v-model="history.note"
       outlined
@@ -35,9 +29,9 @@
 </template>
 
 <script>
-import { getValueById, updateValueById } from "@utls/storages.js"
+import { getValueById, updateValueByKey } from "@utls/storages.js"
 import { dateToText } from "@utls/miscs.js"
-import Tag from "./tag.vue"
+import Tags from "./tags.vue"
 import Star from "./star.vue"
 
 function makeContents(history) {
@@ -74,7 +68,7 @@ function makeContents(history) {
 export default {
   name: "history-detail",
   components: {
-    Tag,
+    Tags,
     Star,
   },
   mounted() {
@@ -85,21 +79,19 @@ export default {
       ready: false,
       tagInput: "",
       contents: [],
-      history: undefined,
     }
   },
   props: {
-    rawHistory: {
+    history: {
       type: Object,
       default: undefined,
     },
   },
   methods: {
     async init() {
-      if (!this.rawHistory) {
+      if (!this.history) {
         return
       }
-      this.history = await getValueById("page", this.rawHistory.id)
       this.history.note = this.history.note || ""
       const domain = await getValueById("domain", this.history.domain)
       this.history.domain = domain
@@ -109,17 +101,17 @@ export default {
     async registerTag() {
       const newTag = this.tagInput
       this.tagInput = ""
-      this.history.tags[newTag] = null
-      await updateValueById("page", this.rawHistory.id, {
+      this.history.tags.push(newTag)
+      await updateValueByKey("page", this.history.url, {
         tags: this.history.tags,
       })
     },
     async updateNote(value) {
-      await updateValueById("page", this.rawHistory.id, { note: value })
+      await updateValueByKey("page", this.history.url, { note: value })
     },
   },
   watch: {
-    rawHistory() {
+    "history.url"() {
       this.ready = false
       this.init()
     },
