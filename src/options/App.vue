@@ -79,7 +79,8 @@ async function searchHistories(searchPattern) {
     tag: (history, value) => Object.keys(history.tags).includes(value),
   }
   const searchers = searchPattern.split(" ").map((pattern) => {
-    let searcher = (history) => history.name.match(new RegExp(pattern, "i"))
+    let searcher = (history) =>
+      (history.name || history.url).match(new RegExp(pattern, "i"))
     for (const key of Object.keys(reservedPatterns)) {
       const match = pattern.match(new RegExp(key + ":(.+)"))
       if (match) {
