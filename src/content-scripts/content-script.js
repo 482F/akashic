@@ -3,20 +3,25 @@ import { sendMessage } from "@utls/messages.js"
 import { getValueByKey, updateValueByKey } from "@utls/storages.js"
 
 async function main() {
-  let title = document.title
-  sendMessage("accessed", {
-    url: location.href,
-    name: title,
-  })
-  await wait(async function () {
-    return getValueByKey("page", location.href)
-  })
+  let url = ""
+  let name = ""
   for (;;) {
-    await sleep(3000)
-    if (title !== document.title) {
-      title = document.title
-      await updateValueByKey("page", location.href, { name: title })
+    if (url !== location.href) {
+      url = location.href
+      name = document.title
+      sendMessage("accessed", {
+        url,
+        name,
+      })
+      await wait(async function () {
+        return getValueByKey("page", location.href)
+      })
+    } else if (name !== document.title) {
+      name = document.title
+      console.log("name", name)
+      await updateValueByKey("page", location.href, { name })
     }
+    await sleep(3000)
   }
 }
 
