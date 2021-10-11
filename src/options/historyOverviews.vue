@@ -38,25 +38,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.overviews {
-  height: 75vh;
-  @apply overflow-auto;
-  scrollbar-width: thin;
-  scrollbar-color: #6969dd #e0e0e0;
-}
-
-.overviews::-webkit-scrollbar {
-  width: 10px;
-}
-
-.overviews::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
-  border-radius: 100px;
-}
-
-.overviews::-webkit-scrollbar-thumb {
-  background-color: #a8a8a8;
-  border-radius: 100px;
-}
-</style>
+<style lang="scss" scoped></style>
