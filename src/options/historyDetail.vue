@@ -34,6 +34,23 @@ import { dateToText } from "@utls/miscs.js"
 import Tag from "./tag.vue"
 import Star from "./star.vue"
 
+function makeContents(history) {
+  const contents = []
+  contents.push({
+    title: "URL",
+    body: `<a href="${history.url}">${history.url}</a>`,
+  })
+  contents.push({
+    title: "last accessed",
+    body: dateToText(new Date(history.accessDates.slice(-1)[0])),
+  })
+  contents.push({
+    title: "access count",
+    body: history.accessDates.length,
+  })
+  return contents
+}
+
 export default {
   name: "history-detail",
   components: {
@@ -65,20 +82,7 @@ export default {
       this.history = await getValueById("page", this.rawHistory.id)
       const domain = await getValueById("domain", this.history.domain)
       this.history.domain = domain
-      this.contents = [
-        {
-          title: "URL",
-          body: `<a href="${this.history.url}">${this.history.url}</a>`,
-        },
-        {
-          title: "last accessed",
-          body: dateToText(new Date(this.history.accessDates.slice(-1)[0])),
-        },
-        {
-          title: "access count",
-          body: this.history.accessDates.length,
-        },
-      ]
+      this.contents = makeContents(this.history)
       this.ready = true
     },
     async registerTag() {
