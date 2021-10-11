@@ -63,3 +63,10 @@ export async function* uniqueAsyncGenerator(asyncGenerator, func) {
     }
   }
 }
+
+export async function* arrayToAsyncGenerator(array) {
+  for (const value of array) {
+    yield value
+    await sleep(0)
+  }
+}

@@ -20,14 +20,8 @@
             class="inline-block mr-2"
           />
           <v-switch
-            :value="searchPattern.includes('star:true')"
-            @click="
-              () => {
-                searchPattern = searchPattern.includes('star:true')
-                  ? (searchPattern = searchPattern.replace('star:true', ''))
-                  : (searchPattern = 'star:true ' + searchPattern)
-              }
-            "
+            v-model="filterStar"
+            @change="switchFilterStar"
             label="スターのみ表示"
             dense
             class="inline-block mr-2"
@@ -67,16 +61,21 @@ import {
   assignAsyncGenerator,
   filterAsyncGenerator,
   uniqueAsyncGenerator,
+  arrayToAsyncGenerator,
 } from "@utls/asyncs.js"
-import { getListContentsReverse, getValueById } from "@utls/storages.js"
+import {
+  getStorage,
+  getListContentsReverse,
+  getValueById,
+} from "@utls/storages.js"
 import HistoryOverviews from "./historyOverviews.vue"
 import HistoryDetail from "./historyDetail.vue"
 
 const historyPerPage = 100
+let filterStar = false
 
-function searchHistories(searchPattern) {
+async function searchHistories(searchPattern) {
   const reservedPatterns = {
-    star: (history, value) => history.star.toString() === value,
     tag: (history, value) => Object.keys(history.tags).includes(value),
   }
   const searchers = searchPattern.split(" ").map((pattern) => {
@@ -90,13 +89,15 @@ function searchHistories(searchPattern) {
     }
     return searcher
   })
-  return filterAsyncGenerator(
-    getListContentsReverse("history"),
-    async function (rawHistory) {
-      const history = await getValueById("page", rawHistory.id)
-      return searchers.every((searcher) => searcher(history))
-    }
-  )
+  const asyncGenerator = filterStar
+    ? arrayToAsyncGenerator(
+        Object.keys((await getStorage("stars")) || {}).map((id) => ({ id }))
+      )
+    : getListContentsReverse("history")
+  return filterAsyncGenerator(asyncGenerator, async function (rawHistory) {
+    const history = await getValueById("page", rawHistory.id)
+    return searchers.every((searcher) => searcher(history))
+  })
 }
 
 export default {
@@ -119,6 +120,7 @@ export default {
       searchPattern: "",
       stopAssignFunc: () => undefined,
       uniqueFlag: false,
+      filterStar,
     }
   },
   computed: {
@@ -127,7 +129,7 @@ export default {
   methods: {
     async init(value = "") {
       this.stopAssignFunc()
-      let asyncGenerator = searchHistories(value)
+      let asyncGenerator = await searchHistories(value)
       if (this.uniqueFlag) {
         asyncGenerator = uniqueAsyncGenerator(
           asyncGenerator,
@@ -143,12 +145,18 @@ export default {
     searchTag(tag) {
       this.searchPattern = "tag:" + tag
     },
+    switchFilterStar(value) {
+      filterStar = value
+    },
   },
   watch: {
     searchPattern(value) {
       this.init(value)
     },
     uniqueFlag() {
+      this.init(this.searchPattern)
+    },
+    filterStar() {
       this.init(this.searchPattern)
     },
   },
