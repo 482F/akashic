@@ -46,7 +46,7 @@ async function setHistory(obj) {
       name: obj.name,
       star: false,
       accessDates: [],
-      tags: {},
+      tags: [],
     }
   }
   history.accessDates.push(new Date().getTime())
